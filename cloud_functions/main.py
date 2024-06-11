@@ -1,2 +1,2 @@
-def hello_world():
+def test_functions():
     return 'Hello, World!'
