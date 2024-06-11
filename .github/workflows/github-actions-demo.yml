@@ -1,9 +1,11 @@
 name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: 
-  pull_request:
+  # pull_request:
+  push
     paths:
     - 'target_dir/*'
+    - '.github/workflows/github-actions-demo.yml'
 
 jobs:
   Explore-GitHub-Actions:
