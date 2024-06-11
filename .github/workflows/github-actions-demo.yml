@@ -1,6 +1,5 @@
 name: Cloud Functions Deploy - credit_master_uodatater
 
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: 
   # pull_request:
   push:
@@ -18,7 +17,10 @@ env:
 jobs:
   cloud_functions_deploy:
     runs-on: ubuntu-20.04 
-
+    permissions:
+      id-token: write
+      contents: read
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
