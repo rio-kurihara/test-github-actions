@@ -1,4 +1,4 @@
-name: Cloud Functions Deploy - credit_master_uodatater
+name: Cloud Functions Deploy - credit_master_updater
 
 on: 
   # pull_request:
@@ -10,7 +10,7 @@ on:
       - '.github/workflows/github-actions-demo.yml'
 
 env:
-  workload_identity_provider: projects/623982758412/locations/global/workloadIdentityPools/test-pool/subject/SUBJECT_ATTRIBUTE_VALUE
+  workload_identity_provider: projects/623982758412/locations/global/workloadIdentityPools/test-pool/providers/provider-rio
   GCP_PROJECT_ID: rio-test-pj-426105
   service_account: test-service-account@rio-test-pj-426105.iam.gserviceaccount.com
 
