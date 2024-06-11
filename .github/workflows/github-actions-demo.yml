@@ -3,22 +3,44 @@ run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: 
   # pull_request:
   push:
+    branches:
+      - main
     paths:
-    - 'target_dir/*'
-    - '.github/workflows/github-actions-demo.yml'
+      - 'target_dir/*'
+      - '.github/workflows/github-actions-demo.yml'
+
+env:
+  workload-identity-provider: projects/623982758412/locations/global/workloadIdentityPools/test-pool/subject/SUBJECT_ATTRIBUTE_VALUE
+  GCP_PROJECT_ID: rio-test-pj-426105
+  service-account: test-service-account@rio-test-pj-426105.iam.gserviceaccount.com
 
 jobs:
-  Explore-GitHub-Actions:
-    runs-on: ubuntu-latest
+  cloud functions deploy:
+    runs-on: ubuntu-20.04 
+
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
-        uses: actions/checkout@v4
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
+      - name: Checkout code
+        uses: actions/checkout@v2 これなに？
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: ${{ env.workload-identity-provider }}
+          service_account: ${{ env.service-account }}
+      
+      - name: Setup Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+
+      - name: Deploy to Google Cloud Functions
         run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+          gcloud functions deploy test_functions \
+        		--region us-central1 \
+        		--source cloud_functions/ \
+        		--entry-point test_functions \
+        		--project ${{ env.GCP_PROJECT_ID }} \
+        		--runtime python310 \
+            --trigger-http \
+            --allow-unauthenticated \
+        		--memory 1024MB
