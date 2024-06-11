@@ -1,4 +1,5 @@
-name: GitHub Actions Demo
+name: Cloud Functions Deploy - credit_master_uodatater
+
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: 
   # pull_request:
@@ -10,23 +11,23 @@ on:
       - '.github/workflows/github-actions-demo.yml'
 
 env:
-  workload-identity-provider: projects/623982758412/locations/global/workloadIdentityPools/test-pool/subject/SUBJECT_ATTRIBUTE_VALUE
+  workload_identity_provider: projects/623982758412/locations/global/workloadIdentityPools/test-pool/subject/SUBJECT_ATTRIBUTE_VALUE
   GCP_PROJECT_ID: rio-test-pj-426105
-  service-account: test-service-account@rio-test-pj-426105.iam.gserviceaccount.com
+  service_account: test-service-account@rio-test-pj-426105.iam.gserviceaccount.com
 
 jobs:
-  cloud functions deploy:
+  cloud_functions_deploy:
     runs-on: ubuntu-20.04 
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2 これなに？
+        uses: actions/checkout@v2
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
         with:
-          workload_identity_provider: ${{ env.workload-identity-provider }}
-          service_account: ${{ env.service-account }}
+          workload_identity_provider: ${{ env.workload_identity_provider }}
+          service_account: ${{ env.service_account }}
       
       - name: Setup Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
@@ -36,11 +37,11 @@ jobs:
       - name: Deploy to Google Cloud Functions
         run: |
           gcloud functions deploy test_functions \
-        		--region us-central1 \
-        		--source cloud_functions/ \
-        		--entry-point test_functions \
-        		--project ${{ env.GCP_PROJECT_ID }} \
-        		--runtime python310 \
+            --region us-central1 \
+            --source cloud_functions/ \
+            --entry-point test_functions \
+            --project ${{ env.GCP_PROJECT_ID }} \
+            --runtime python310 \
             --trigger-http \
             --allow-unauthenticated \
-        		--memory 1024MB
+            --memory 1024MB
